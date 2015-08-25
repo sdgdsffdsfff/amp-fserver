@@ -28,7 +28,6 @@ public class StartProcessTestCase extends AbstractTestCase {
 	public void testStartProcess() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(buildRequest())
-				.andExpect(MockMvcResultMatchers.status().is4xxClientError())
 				.andDo(MockMvcResultHandlers.print()).andReturn();
 		System.out.println(mvcResult.getResolvedException()
 				.getLocalizedMessage());

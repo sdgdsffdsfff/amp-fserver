@@ -5,7 +5,7 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessOperationNotSupportedException extends ProcessException {
+public class ProcessOperationNotSupportedException extends ProcessAccessException {
 	private static final long serialVersionUID = 1L;
 
 	public ProcessOperationNotSupportedException(String message) {

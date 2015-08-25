@@ -1,24 +1,43 @@
 package com.wisedu.amp.fserver.exception;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 /**
  * 错误信息类
+ * <p>
+ * { "code" : 1234, "message" : "Something bad happened", "description" :
+ * "More details about the error here" }
+ * </p>
  * 
  * @author zengxianping
  *
  */
 public class ErrorInfo {
-
+	private String code;
 	private String message;
-	private String exception;
+	private String description;
 
-	public ErrorInfo(String message, Exception ex) {
+	public ErrorInfo() {
+	}
+
+	public ErrorInfo(String code) {
+		this.code = code;
+	}
+
+	public ErrorInfo(String code, String message) {
+		this(code);
 		this.message = message;
-		if (ex != null) {
-			this.exception = ex.getLocalizedMessage();
-		}
+	}
+
+	public ErrorInfo(String code, String message, String description) {
+		this(code, message);
+		this.description = description;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getMessage() {
@@ -29,19 +48,18 @@ public class ErrorInfo {
 		this.message = message;
 	}
 
-	public void setException(String exception) {
-		this.exception = exception;
+	public String getDescription() {
+		return description;
 	}
 
-	@JsonInclude(Include.NON_NULL)
-	public String getException() {
-		return exception;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return "ErrorInfo [message=" + message + ", exception=" + exception
-				+ "]";
+		return "ErrorInfo [code=" + code + ", message=" + message
+				+ ", description=" + description + "]";
 	}
 
 }

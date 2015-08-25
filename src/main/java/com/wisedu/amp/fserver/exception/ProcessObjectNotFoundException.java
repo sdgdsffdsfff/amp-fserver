@@ -5,7 +5,7 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessObjectNotFoundException extends ProcessException {
+public class ProcessObjectNotFoundException extends ProcessAccessException {
 	private static final long serialVersionUID = 1L;
 
 	public ProcessObjectNotFoundException(String message) {

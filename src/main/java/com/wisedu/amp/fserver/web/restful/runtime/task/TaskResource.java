@@ -1,5 +1,6 @@
 package com.wisedu.amp.fserver.web.restful.runtime.task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +53,12 @@ public class TaskResource {
 	/**
 	 * 查询待办任务列表 备注：因为查待办列表的请求参数比较复杂（多且有数组），所以这里不完全按照RESTful规范，而是将请求方法设为：post
 	 * 
-	 * @param QueryTaskRequest 查询任务请求体
+	 * @param QueryTaskRequest
+	 *            查询任务请求体
 	 * @return 待办任务列表
 	 */
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public PageResponse queryToDoTasks(
+	public PageResponse<TaskQueryResponse> queryToDoTasks(
 			@RequestBody QueryTaskRequest queryTaskRequest) {
 		// 检查参数
 		if (StringUtils.isEmpty(queryTaskRequest.getAssignee())) {
@@ -84,18 +86,24 @@ public class TaskResource {
 		// 设置排序字段，目前只支持根据创建时间排序
 		taskQuery.orderByTaskCreateTime();
 		// 设置排序类型
-		if (StringUtil
-				.equals(queryTaskRequest.getSort(), PageRequest.SORT_DESC)) {
+		if (StringUtils.equals(queryTaskRequest.getSort(),
+				PageRequest.SORT_DESC)) {
 			taskQuery.desc();
 		} else {
 			taskQuery.asc();
 		}
 
-		List<Task> tasks = taskQuery.listPagination(queryTaskRequest.getPageIndex(),
-				queryTaskRequest.getPageSize());
+		// 查询结果
+		long total = taskQuery.count();
+		List<Task> tasks = new ArrayList<Task>();
+		if (total > 0) {
+			tasks = taskQuery.listPagination(queryTaskRequest.getPageIndex(),
+					queryTaskRequest.getPageSize());
+
+		}
 
 		return restResponseFactory.createToDoTasksResponse(tasks,
-				queryTaskRequest);
+				queryTaskRequest, total);
 	}
 
 	/**

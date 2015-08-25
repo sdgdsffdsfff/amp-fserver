@@ -5,7 +5,7 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessForbiddenException extends ProcessException {
+public class ProcessForbiddenException extends ProcessAccessException {
 	private static final long serialVersionUID = 1L;
 
 	public ProcessForbiddenException(String message) {

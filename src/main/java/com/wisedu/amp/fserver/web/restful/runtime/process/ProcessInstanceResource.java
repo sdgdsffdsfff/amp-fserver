@@ -1,6 +1,7 @@
 package com.wisedu.amp.fserver.web.restful.runtime.process;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,12 @@ import org.foxbpm.engine.impl.util.StringUtil;
 import org.foxbpm.engine.runtime.ProcessInstance;
 import org.foxbpm.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wisedu.amp.fserver.exception.ProcessException;
+import com.wisedu.amp.fserver.exception.ProcessAccessException;
 import com.wisedu.amp.fserver.exception.ProcessIllegalArgumentException;
 import com.wisedu.amp.fserver.exception.ProcessObjectNotFoundException;
 import com.wisedu.amp.fserver.util.ExceptionUtil;
@@ -58,7 +57,6 @@ public class ProcessInstanceResource {
 	 * @return 流程实例响应
 	 */
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	@ResponseStatus(HttpStatus.CREATED)
 	public ProcessInstanceResponse startProcess(
 			@RequestBody StartProcessRequest startProcessRequest) {
 		// 参数检测
@@ -99,11 +97,11 @@ public class ProcessInstanceResource {
 				if ("10602101".equals(exceptionCode)) {
 					throw new ProcessObjectNotFoundException("未找到流程定义");
 				} else if ("10700002".equals(exceptionCode)) {
-					throw new ProcessException(
+					throw new ProcessAccessException(
 							((FoxBPMException) e).getLocalizedMessage());
 				}
 			} else {
-				throw new ProcessException("启动流程出错！", e);
+				throw new ProcessAccessException("启动流程出错！", e);
 			}
 
 		}
@@ -121,10 +119,10 @@ public class ProcessInstanceResource {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public PageResponse queryProcessInstance(HttpServletRequest httpRequest) {
+	public PageResponse<ProcessInstanceQueryResponse> queryProcessInstance(
+			HttpServletRequest httpRequest) {
 		QueryProcessInstanceRequest queryProcessInstanceRequest = constructQueryProcessInstanceRequest(httpRequest);
 
-		List<ProcessInstance> processInstances = null;
 		ProcessInstanceQuery processInstanceQuery = runtimeService
 				.createProcessInstanceQuery();
 		processInstanceQuery.processDefinitionKey(queryProcessInstanceRequest
@@ -152,12 +150,16 @@ public class ProcessInstanceResource {
 			processInstanceQuery.asc();
 		}
 
-		processInstances = processInstanceQuery.listPagination(
-				queryProcessInstanceRequest.getPageIndex(),
-				queryProcessInstanceRequest.getPageSize());
+		long total = processInstanceQuery.count();
+		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
+		if (total > 0) {
+			processInstances = processInstanceQuery.listPagination(
+					queryProcessInstanceRequest.getPageIndex(),
+					queryProcessInstanceRequest.getPageSize());
+		}
 
 		return restResponseFactory.createQueryProcessResponse(processInstances,
-				queryProcessInstanceRequest);
+				queryProcessInstanceRequest, total);
 	}
 
 	/**

@@ -5,7 +5,7 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessIllegalArgumentException extends ProcessException {
+public class ProcessIllegalArgumentException extends ProcessAccessException {
 
 	private static final long serialVersionUID = 1L;
 

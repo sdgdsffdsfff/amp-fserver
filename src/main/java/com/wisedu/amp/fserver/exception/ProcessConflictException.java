@@ -5,7 +5,7 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessConflictException extends ProcessException {
+public class ProcessConflictException extends ProcessAccessException {
 	private static final long serialVersionUID = 1L;
 
 	public ProcessConflictException(String message) {

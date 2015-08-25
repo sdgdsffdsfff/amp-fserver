@@ -1,16 +1,18 @@
 package com.wisedu.amp.fserver.web.restful;
 
+import java.util.List;
+
 /**
  * 分页查询集合的格式
  * 
  * @author ych
  *
  */
-public class PageResponse {
+public class PageResponse<T> {
 	/**
 	 * 数据集合 数组、collection
 	 */
-	private Object data;
+	private List<T> data;
 	/**
 	 * 总记录数
 	 */
@@ -24,11 +26,11 @@ public class PageResponse {
 	 */
 	private int pageSize;
 
-	public Object getData() {
+	public List<T> getData() {
 		return data;
 	}
 
-	public PageResponse setData(Object data) {
+	public PageResponse<T> setData(List<T> data) {
 		this.data = data;
 		return this;
 	}

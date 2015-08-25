@@ -7,14 +7,14 @@ package com.wisedu.amp.fserver.exception;
  * @author zengxianping
  *
  */
-public class ProcessException extends RuntimeException {
+public class ProcessAccessException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public ProcessException(String message, Throwable cause) {
+	public ProcessAccessException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public ProcessException(String message) {
+	public ProcessAccessException(String message) {
 		super(message);
 	}
 }

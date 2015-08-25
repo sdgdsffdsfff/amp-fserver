@@ -6,7 +6,7 @@ package com.wisedu.amp.fserver.exception;
  * @author tives
  *
  */
-public class AccessTokenAlreadyGeneratedException extends ProcessException {
+public class AccessTokenAlreadyGeneratedException extends ProcessAccessException {
 
 	/**
 	 * 
